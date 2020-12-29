@@ -1,9 +1,12 @@
 'use strict';
 
-// put your own value below!
 const apiKey = 'uygzXAg9JtfXsgtYv2EmHv9sok48ZoljbocJoG75'; 
 const searchURL = 'https://developer.nps.gov/api/v1/parks';
 
+function formatStateCodes(searchTerm) {
+  const stateString = searchTerm.join();
+  return 'stateCode=' + stateString;
+};
 
 function formatQueryParams(params) {
   const queryItems = Object.keys(params)
@@ -22,19 +25,19 @@ function displayResults(responseJson) {
       <p>${responseJson.data[i].url}</p>
       </li>`
     )};
-  //display the results section  
   $('#results').removeClass('hidden');
 };
 
 function getParks(searchTerm, maxResults) {
   const params = {
-    stateCode: searchTerm, 
+    //stateCode: searchTerm, 
     limit: maxResults, 
     api_key: apiKey,
   };
-  const queryString = formatQueryParams(params)
-  const url = searchURL + '?' + queryString;
-
+  const stateCodes = formatStateCodes(searchTerm);
+  const queryString = formatQueryParams(params);
+  const url = searchURL + '?' + stateCodes + '&' + queryString;
+  
   console.log(url);
 
   fetch(url)
